@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const socket_io = require('socket.io');
+const gctl = require('./controllers/game');
 const mongoose = require('mongoose');
 
 const apiRoute = require('./routes/api');
@@ -34,8 +35,9 @@ var server = app.listen(config.port, () => {
 const io = socket_io.listen(server);
 
 io.on('connection', (socket) => {
-    socket.on('message', function (msg) {
-        console.log("received ", msg)
-        io.emit('message', msg);
+    socket.on('message', async function (msg) {
+        console.log("received ", msg);
+        let message = await gctl.ws_play(msg);
+        io.emit('message', message);
     });
 });

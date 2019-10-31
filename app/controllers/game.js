@@ -1,4 +1,5 @@
 const Game = require("../models/game");
+let logic = require('./logic');
 let ctrl = {};
 
 ctrl.create = async (req, res, next) => {
@@ -48,7 +49,7 @@ ctrl.replay = async (req, res, next) => {
     try {
         let ref = req.params.ref;
         let game = await Game.find({
-            "game_ref": "ref"
+            "game_ref": ref
         });
         let steps = game[0].game_steps;
 
@@ -62,12 +63,32 @@ ctrl.replay = async (req, res, next) => {
             error: ex
         });
     }
-
-
 };
 
-ctrl.ws_play = (ref) => {
+ctrl.ws_play = async (msg) => {
+    msg = JSON.parse(msg);
+    let game = await Game.find({
+        "game_ref": msg.ref
+    });
+    game = game[0];
+    game.game_state = "inprogress";
+    game.game_steps.push(msg.board);
+    await game.save();
+
+
+    let gamewin = logic.hasWin(msg.board);
+    if (gamewin.win) return {
+        board: msg.board,
+        win: gamewin
+    };
+    let fullboard = logic.fullBoard(msg.board);
+
+    msg.board = logic.newMove(msg.board);
+
+
 
 }
+
+
 
 module.exports = ctrl;
