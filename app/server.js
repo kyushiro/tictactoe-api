@@ -1,11 +1,25 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const socket_io = require('socket.io');
+const mongoose = require('mongoose');
 
 const apiRoute = require('./routes/api');
 const config = require('./../config');
 
 const app = express();
+
+mongoose.connect(config.mongo.database, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+}).then(
+    () => {
+        console.log("db connection successful")
+    },
+    err => {
+        console.log("db connection failed, " + err)
+    }
+);
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -20,5 +34,8 @@ var server = app.listen(config.port, () => {
 const io = socket_io.listen(server);
 
 io.on('connection', (socket) => {
-    console.log('Hello through socket.io');
+    socket.on('message', function (msg) {
+        console.log("received ", msg)
+        io.emit('message', msg);
+    });
 });
