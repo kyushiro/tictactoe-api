@@ -7,4 +7,8 @@ router.get('/about', (req, res, next) => {
     })
 });
 
+router.get('/create-game', async (req, res, next) => {
+
+});
+
 module.exports = router;
