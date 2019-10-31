@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const gameCtl = require('../controllers/game');
 
 router.get('/about', (req, res, next) => {
     res.status(200).json({
@@ -7,8 +8,9 @@ router.get('/about', (req, res, next) => {
     })
 });
 
-router.get('/create-game', async (req, res, next) => {
+router.get('/create-game', gameCtl.create);
+router.get('/list-games', gameCtl.list);
+router.get('/replay/:ref', gameCtl.replay);
 
-});
 
 module.exports = router;

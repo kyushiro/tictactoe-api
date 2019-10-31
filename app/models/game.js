@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 var GameSchema = new Schema({
     game_ref: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     game_start: {
         type: Date,
