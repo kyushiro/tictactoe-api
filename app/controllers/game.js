@@ -66,34 +66,39 @@ ctrl.replay = async (req, res, next) => {
 };
 
 ctrl.ws_play = async (msg) => {
-    msg = JSON.parse(msg);
-    let game = await Game.find({
-        "game_ref": msg.ref
-    });
-    game = game[0];
-    game.game_state = "inprogress";
-    game.game_steps.push(msg.board);
-    await game.save();
+    try {
+        msg = JSON.parse(msg);
+        let game = await Game.find({
+            "game_ref": msg.ref
+        });
+        game = game[0];
+        game.game_state = "inprogress";
+        game.game_steps.push(msg.board);
+        await game.save();
 
 
-    let gamewin = logic.hasWin(msg.board);
-    let fullboard = logic.fullboard(msg.board);
-    if (gamewin.win || fullboard) {
-        game.game_state = "complete";
-    } else {
-        if (!fullboard) {
-            msg.board = logic.newMove(msg.board);
-            game.game_steps.push(msg.board);
+        let gamewin = logic.hasWin(msg.board);
+        let fullboard = logic.fullboard(msg.board);
+        if (gamewin.win || fullboard) {
+            game.game_state = "complete";
+        } else {
+            if (!fullboard) {
+                msg.board = logic.newMove(msg.board);
+                game.game_steps.push(msg.board);
+            }
         }
+
+        await game.save();
+
+        return {
+            win: gamewin,
+            fullBoard: fullboard,
+            board: msg.board
+        };
+    } catch (ex) {
+        console.log("An error occured during processing", ex);
     }
 
-    await game.save();
-
-    return {
-        win: gamewin,
-        fullBoard: fullboard,
-        board: msg.board
-    };
 }
 
 
