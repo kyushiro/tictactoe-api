@@ -33,7 +33,7 @@ ctrl.list = async (req, res, next) => {
         });
 
         res.status(200).json({
-            "games": games.map(x => x.game_ref)
+            "games": games
         });
     } catch (ex) {
         console.log(ex);
