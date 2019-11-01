@@ -1,11 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const socket_io = require('socket.io');
-const gctl = require('./controllers/game');
+const gctl = require('./app/controllers/game');
 const mongoose = require('mongoose');
 
-const apiRoute = require('./routes/api');
-const config = require('./../config');
+const apiRoute = require('./app/routes/api');
+const config = require('./config');
 
 const app = express();
 
