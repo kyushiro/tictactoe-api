@@ -77,16 +77,23 @@ ctrl.ws_play = async (msg) => {
 
 
     let gamewin = logic.hasWin(msg.board);
-    if (gamewin.win) return {
-        board: msg.board,
-        win: gamewin
+    let fullboard = logic.fullboard(msg.board);
+    if (gamewin.win || fullboard) {
+        game.game_state = "complete";
+    } else {
+        if (!fullboard) {
+            msg.board = logic.newMove(msg.board);
+            game.game_steps.push(msg.board);
+        }
+    }
+
+    await game.save();
+
+    return {
+        win: gamewin,
+        fullBoard: fullboard,
+        board: msg.board
     };
-    let fullboard = logic.fullBoard(msg.board);
-
-    msg.board = logic.newMove(msg.board);
-
-
-
 }
 
 

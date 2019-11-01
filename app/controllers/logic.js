@@ -48,4 +48,28 @@ logic.fullboard = (board) => {
     return full;
 }
 
+logic.makemove = (board) => {
+    // get free spots
+    let freerow = [];
+    let freecol = [];
+    board.map((row, rownum) => {
+        row.map((col, colnum) => {
+            if (col == null) {
+                freerow.push(rownum);
+                freecol.push(colnum);
+            }
+        })
+    });
+
+    // get number of free spots on gameboard
+    let freespots = freerow.length;
+    freespots--; // max index (0 based);
+
+    // randow number, 0 - freespots
+    let randCo = Math.floor(Math.random() * (freespots + 1));
+
+    board[freerow[randCo]][freecol[randCo]] = "x";
+    return board;
+}
+
 module.exports = logic;
