@@ -28,10 +28,12 @@ logic.hasWin = (board) => {
     if (!win) {
         // console.log("no win cols");
         // 0,0 1,1 2,2   0,2 1,1 2,0 
-        if ((board[0][0] != null && (board[0][0] == board[1][1] && board[1][1] == board[2][2])) ||
-            ((board[0][2] != null && board[0][2] == board[1][1] && board[1][1] == board[2][0]))) {
+        if ((board[0][0] != null && (board[0][0] == board[1][1] && board[1][1] == board[2][2]))) {
             win = true;
             winSign = board[0][0];
+        } else if ((board[0][2] != null && board[0][2] == board[1][1] && board[1][1] == board[2][0])) {
+            win = true;
+            winSign = board[0][2];
         }
         // else console.log("no win diags");
     }
