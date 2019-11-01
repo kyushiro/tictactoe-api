@@ -83,7 +83,7 @@ ctrl.ws_play = async (msg) => {
             game.game_state = "complete";
         } else {
             if (!fullboard) {
-                msg.board = logic.newMove(msg.board);
+                msg.board = logic.makemove(msg.board);
                 game.game_steps.push(msg.board);
             }
         }
