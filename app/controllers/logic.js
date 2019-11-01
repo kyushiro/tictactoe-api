@@ -14,6 +14,7 @@ logic.hasWin = (board) => {
 
     // if no winning rows, check columns
     if (!win) {
+        // console.log("no win rows");
         let col_array = [0, 1, 2];
         col_array.map(cols => {
             if (board[0][cols] != null && board[0][cols] == board[1][cols] && board[1][cols] == board[2][cols]) {
@@ -25,12 +26,14 @@ logic.hasWin = (board) => {
 
     // if no winning cols, check diagonals
     if (!win) {
+        // console.log("no win cols");
         // 0,0 1,1 2,2   0,2 1,1 2,0 
         if ((board[0][0] != null && (board[0][0] == board[1][1] && board[1][1] == board[2][2])) ||
-            ((board[0][0] != null && board[0][2] == board[1][1] && board[1][1] == board[2][0]))) {
+            ((board[0][2] != null && board[0][2] == board[1][1] && board[1][1] == board[2][0]))) {
             win = true;
             winSign = board[0][0];
         }
+        // else console.log("no win diags");
     }
 
     result = {};
@@ -49,6 +52,7 @@ logic.fullboard = (board) => {
 }
 
 logic.makemove = (board) => {
+    console.log("entered make move");
     // get free spots
     let freerow = [];
     let freecol = [];
@@ -67,6 +71,8 @@ logic.makemove = (board) => {
 
     // randow number, 0 - freespots
     let randCo = Math.floor(Math.random() * (freespots + 1));
+
+    console.log(`Computer plays x at (${freerow[randCo]},${freecol[randCo]})`)
 
     board[freerow[randCo]][freecol[randCo]] = "x";
     return board;
